@@ -157,3 +157,37 @@ function starttheme_link($variables) {
 	return '<a href="' . check_plain(url($variables['path'], $variables['options'])) . '"' . drupal_attributes($variables['options']['attributes']) . '>' . ($variables['options']['html'] ? $variables['text'] : check_plain($variables['text'])) . '</a>';
     }
 }
+function starttheme_menu_link(array $variables) {
+  $element = $variables['element'];
+  $sub_menu = '';
+  $menu_id = $element['#theme'];
+
+  switch ($menu_id) {
+    case 'menu_link__main_menu' :
+      $element['#attributes']['class'][] = 'item-' . $element['#original_link']['mlid'];
+      if ($element['#below']) {
+        $sub_menu = drupal_render($element['#below']);
+      }
+      $output = l($element['#title'], $element['#href'], $element['#localized_options']);
+       $pattern1 = '/<\/a>$/';  $pattern2 = '/active/';
+	  if(!preg_match($pattern1, $output) || preg_match($pattern2, $output)) {
+			$element['#attributes']['class'][] = 'active active-trail';
+		}
+      $menu_item = '<li' . drupal_attributes($element['#attributes']) . '>
+                    
+                    <span class="item-wrapper">' . $output . $sub_menu . "</span></li>\n";
+    break;
+  
+    default:
+      $element['#attributes']['class'][] = 'item-' . $element['#original_link']['mlid'];
+      if ($element['#below']) {
+        $sub_menu = drupal_render($element['#below']);
+      }
+      $output = l($element['#title'], $element['#href'], $element['#localized_options']);
+      $menu_item = '<li' . drupal_attributes($element['#attributes']) . '>' . $output . $sub_menu . "</li>\n";
+    
+    break;
+  }
+
+  return $menu_item;
+}
