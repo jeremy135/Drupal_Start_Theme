@@ -44,6 +44,10 @@ function starttheme_process_page(&$variables) {
   if (module_exists('color')) {
     _color_page_alter($variables);
   }
+  if(isset($variables['node'])) {
+		$variables['theme_hook_suggestions'][] =  'page__'. $variables['node']->type;
+		$variables['theme_hook_suggestions'][] = "page__node__" . $variables['node']->nid;
+	}
   // Always print the site name and slogan, but if they are toggled off, we'll
   // just hide them visually.
   $variables['hide_site_name']   = theme_get_setting('toggle_name') ? FALSE : TRUE;
